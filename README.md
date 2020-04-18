@@ -12,7 +12,7 @@ Some people ( not all ) think that sort of thing is neat.
 See [RGBLed.cpp](./RGBLed.cpp) 
 
 # Run the python HTTP API 
-You can find that at [github.com/edyesed/led-webserver](github.com/edyesed/led-webserver).
+You can find that at [github.com/edyesed/led-webserver](https://github.com/edyesed/led-webserver).
 
 Once you start it, you have a RGBLed with an http interface on your local computer.
 

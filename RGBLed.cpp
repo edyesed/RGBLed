@@ -1,89 +1,45 @@
-#include "RGBLed.h"
-#include "Arduino.h"
+// You can load this one file as your main sketch
+// with an arduino nano
+// 
+// copied from https://create.arduino.cc/projecthub/muhammad-aqib/arduino-rgb-led-tutorial-fc003e
+//
+int red_light_pin= 3;
+int green_light_pin = 5;
+int blue_light_pin = 6;
+void setup() {
+  pinMode(red_light_pin, OUTPUT);
+  pinMode(green_light_pin, OUTPUT);
+  pinMode(blue_light_pin, OUTPUT);
+  Serial.begin(9600);
 
-RGBLed::RGBLed()
-{
-  _r = 0;
-  _g = 0;
-  _b = 0;
-  _rPin = 0;
-  _gPin = 0;
-  _bPin = 0;
 }
+void loop() {
+  while (Serial.available() > 0) {
+      // look for the next valid integer in the incoming serial stream:
+      int red = Serial.parseInt(); 
+      // do it again:
+      int green = Serial.parseInt(); 
+      // do it again:
+      int blue = Serial.parseInt(); 
 
-RGBLed::RGBLed(int rPin, int gPin, int bPin, bool commonCathode) : RGBLed()
-{
-  _commonCathode = commonCathode;
-  _rPin = rPin;
-  _gPin = gPin;
-  _bPin = bPin;
-  
-  pinMode(_rPin, OUTPUT);
-  pinMode(_gPin, OUTPUT);
-  pinMode(_bPin, OUTPUT);
-}
-
-bool RGBLed::setColor(int r, int g, int b, int durationMS)
-{
-  if(durationMS)
-  {
-    return setColorTransition(r, g, b, durationMS);
-  }
-  {
-    _r = r;
-    _g = g;
-    _b = b;
-    setLED(r, g, b);
-  }
-  return false;
-}
-
-#define STEPS 50
-
-bool RGBLed::setColorTransition(int r, int g, int b, int durationMS)
-{
-  int curR = _r * 100;
-  int curG = _g * 100;
-  int curB = _b * 100;
-    
-  int stepDuration = durationMS/STEPS;
-
-  int deltaR = ((r * 100) - curR)/STEPS;
-  int deltaG = ((g * 100) - curG)/STEPS;
-  int deltaB = ((b * 100) - curB)/STEPS;
-  
-  for(int i = 0; i < STEPS; i++)
-  {
-    setLED(curR/100, curG/100, curB/100);
-    
-    curR = curR + deltaR;
-    curG = curG + deltaG;
-    curB = curB + deltaB;
-    delay(stepDuration);
-  } 
- 
-  _r = r;
-  _g = g;
-  _b = b;
-  return setLED(_r, _g, _b);
-}
-
-bool RGBLed::setLED(int r, int g, int b)
-{
-    if(_rPin && _gPin && _bPin)
-    {
-      if(!_commonCathode)
-      { 
-        r = 255 - r;
-        g = 255 - g;
-        b = 255 - b;
+      // look for the newline. That's the end of your
+      // sentence:
+      if (Serial.read() == '\n') {
+        // constrain the values to 0 - 255 and invert
+        // if you're using a common-cathode LED, just use "constrain(color, 0, 255);"
+        red = constrain(red, 0, 255);
+        green = constrain(green, 0, 255);
+        blue = constrain(blue, 0, 255);
+        RGB_color(red, green, blue);
+        delay(500);
       }
-  
-      analogWrite(_rPin, r); 
-      analogWrite(_gPin, g); 
-      analogWrite(_bPin, b);
-      
-      return true;
-    }
-    return false;
+  }
+
+}
+
+void RGB_color(int red_light_value, int green_light_value, int blue_light_value)
+ {
+  analogWrite(red_light_pin, red_light_value);
+  analogWrite(green_light_pin, green_light_value);
+  analogWrite(blue_light_pin, blue_light_value);
 }

@@ -1,6 +1,8 @@
 // You can load this one file as your main sketch
 // with an arduino nano
 // 
+// copied from https://create.arduino.cc/projecthub/muhammad-aqib/arduino-rgb-led-tutorial-fc003e
+//
 int red_light_pin= 3;
 int green_light_pin = 5;
 int blue_light_pin = 6;
@@ -28,8 +30,6 @@ void loop() {
         red = constrain(red, 0, 255);
         green = constrain(green, 0, 255);
         blue = constrain(blue, 0, 255);
-        // https://www.arduino.cc/en/Tutorial/ReadASCIIString
-        // pLed->setColor(red, green, blue, 500);
         RGB_color(red, green, blue);
         delay(500);
       }
